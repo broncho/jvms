@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/baneeishaque/adoptium_jdk_go"
 	"github.com/codegangsta/cli"
 	"github.com/tucnak/store"
 	"github.com/ystyle/jvms/utils/file"
@@ -34,11 +32,6 @@ type Config struct {
 }
 
 var config Config
-
-type JdkVersion struct {
-	Version string `json:"version"`
-	Url     string `json:"url"`
-}
 
 func main() {
 	app := cli.NewApp()
@@ -139,7 +132,7 @@ func commands() []cli.Command {
 					fmt.Println("Version " + v + " is already installed.")
 					return nil
 				}
-				versions, err := getJdkVersions()
+				versions, err := jdk.RemoteJdkVersions()
 				if err != nil {
 					return err
 				}
@@ -266,7 +259,7 @@ func commands() []cli.Command {
 				if config.Proxy != "" {
 					web.SetProxy(config.Proxy)
 				}
-				versions, err := getJdkVersions()
+				versions, err := jdk.RemoteJdkVersions()
 				if err != nil {
 					return err
 				}
@@ -280,7 +273,6 @@ func commands() []cli.Command {
 				if len(versions) == 0 {
 					fmt.Println("No availabled jdk veriosn for download.")
 				}
-
 				fmt.Printf("\nFor a complete list, visit %s\n", config.Originalpath)
 				return nil
 			},
@@ -323,36 +315,6 @@ func getJavaHome(jdkTempFile string) string {
 		return nil
 	})
 	return javaHome
-}
-
-func getJdkVersions() ([]JdkVersion, error) {
-	jsonContent, err := web.GetRemoteTextFile(config.Originalpath)
-	if err != nil {
-		return nil, err
-	}
-	var versions []JdkVersion
-	err = json.Unmarshal([]byte(jsonContent), &versions)
-	if err != nil {
-		return nil, err
-	}
-	//fmt.Println(versions)
-	adoptiumJdks := strings.Split(adoptium_jdk_go.ApiListReleases(), "\n")
-	for _, adoptiumJdkUrl := range adoptiumJdks {
-		fileSeparatorIndex := strings.LastIndex(adoptiumJdkUrl, "/")
-		fileName := adoptiumJdkUrl[fileSeparatorIndex+1:]
-		fileVersion := strings.TrimSuffix(fileName, ".zip")
-		//fmt.Println(fileVersion)
-		versions = append(versions, JdkVersion{Version: fileVersion, Url: adoptiumJdkUrl})
-	}
-
-	//Azul JDKs
-	azulJdks := jdk.AzulJDKs()
-	for _, azulJdk := range azulJdks {
-		versions = append(versions, JdkVersion{Version: azulJdk.ShortName, Url: azulJdk.DownloadURL})
-	}
-
-	//fmt.Println(versions)
-	return versions, nil
 }
 
 func startup(c *cli.Context) error {

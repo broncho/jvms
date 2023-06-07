@@ -34,32 +34,14 @@ func IsVersionInstalled(root string, version string) bool {
 	return isInstalled
 }
 
-//func getJdkVersions() ([]JdkVersion, error) {
-//	jsonContent, err := web.GetRemoteTextFile(config.Originalpath)
-//	if err != nil {
-//		return nil, err
-//	}
-//	var versions []JdkVersion
-//	err = json.Unmarshal([]byte(jsonContent), &versions)
-//	if err != nil {
-//		return nil, err
-//	}
-//	//fmt.Println(versions)
-//	adoptiumJdks := strings.Split(adoptium_jdk_go.ApiListReleases(), "\n")
-//	for _, adoptiumJdkUrl := range adoptiumJdks {
-//		fileSeparatorIndex := strings.LastIndex(adoptiumJdkUrl, "/")
-//		fileName := adoptiumJdkUrl[fileSeparatorIndex+1:]
-//		fileVersion := strings.TrimSuffix(fileName, ".zip")
-//		//fmt.Println(fileVersion)
-//		versions = append(versions, JdkVersion{Version: fileVersion, Url: adoptiumJdkUrl})
-//	}
-//
-//	//Azul JDKs
-//	azulJdks := jdk.AzulJDKs()
-//	for _, azulJdk := range azulJdks {
-//		versions = append(versions, JdkVersion{Version: azulJdk.ShortName, Url: azulJdk.DownloadURL})
-//	}
-//
-//	//fmt.Println(versions)
-//	return versions, nil
-//}
+func RemoteJdkVersions() ([]JdkVersion, error) {
+	var versions []JdkVersion
+	var jdkSources = [...]JdkSource{
+		NewAdoptiumJdkSource(),
+		NewAzulJdkSource(),
+	}
+	for _, source := range jdkSources {
+		versions = append(versions, source.JdkVersions()...)
+	}
+	return versions, nil
+}

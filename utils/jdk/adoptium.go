@@ -5,9 +5,6 @@ import (
 	"strings"
 )
 
-const vendor = "Eclipse"
-const url = "https://api.adoptium.net/"
-
 type AdoptiumJdkSource struct {
 	vendor string
 	url    string
@@ -16,7 +13,7 @@ type AdoptiumJdkSource struct {
 func NewAdoptiumJdkSource() *AdoptiumJdkSource {
 	return &AdoptiumJdkSource{
 		vendor: "Eclipse",
-		url:    "https://api.adoptium.net/",
+		url:    "https://api.adoptium.net/", //https://api.adoptium.net/q/swagger-ui
 	}
 }
 
