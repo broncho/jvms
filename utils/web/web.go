@@ -101,3 +101,17 @@ func GetRemoteTextFile(url string) (string, error) {
 		return string(contents), nil
 	}
 }
+
+func Call(url string) ([]byte, error) {
+	res, err := client.Get(url)
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return nil, err
+	}
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return nil, err
+	}
+	return body, nil
+}

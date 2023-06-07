@@ -1,7 +1,5 @@
 github.com/BurntSushi/toml v0.3.0 h1:e1/Ivsx3Z0FVTV0NSOv/aVgbUWyQuzj7DDnFblkRvsY=
 github.com/BurntSushi/toml v0.3.0/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/baneeishaque/adoptium_jdk_go v0.0.0-20221214163615-0b2cfe72098d h1:FvCv/DS+6aTtYYpytCzvY1cMc3hIVm+1z6BHPENpbgA=
-github.com/baneeishaque/adoptium_jdk_go v0.0.0-20221214163615-0b2cfe72098d/go.mod h1:gs3xNqVz971whX9Sz57rT6BGsHKUDW0KLrQ8aLzS2U8=
 github.com/codegangsta/cli v1.19.1 h1:+wkU9+nidApJ051CVhVGnj5li64qOfLPz7eZMn2DPXw=
 github.com/codegangsta/cli v1.19.1/go.mod h1:/qJNoX69yVSKu5o4jLyXAENLRyk1uhi7zkbQ3slBdOA=
 github.com/fatih/color v1.13.0 h1:8LOYc1KYPPmyKMuN8QV2DNRWNbLo6LZ0iLs8+mlH53w=

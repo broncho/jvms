@@ -11,3 +11,10 @@ func TestAdoptiumJdkSource_JdkVersions(t *testing.T) {
 		fmt.Printf("%+v\n", value)
 	}
 }
+
+func TestQueryAdoptiumRelease(t *testing.T) {
+	release := QueryAdoptiumRelease()
+	for _, value := range release {
+		fmt.Println(value)
+	}
+}

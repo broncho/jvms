@@ -5,13 +5,6 @@ import (
 	"testing"
 )
 
-func TestAzulJDKs(t *testing.T) {
-	jdks := AzulJDKs()
-	for _, value := range jdks {
-		fmt.Printf("%+v \n", value)
-	}
-}
-
 func TestAzulJdkSource_JdkVersions(t *testing.T) {
 	source := NewAzulJdkSource()
 	for _, value := range source.JdkVersions() {
@@ -19,7 +12,13 @@ func TestAzulJdkSource_JdkVersions(t *testing.T) {
 	}
 }
 
-func TestAzulApiEndpoint(t *testing.T) {
-	url := AzulApiEndpoint()
-	fmt.Println(url)
+func TestQueryAzulJdkVersions(t *testing.T) {
+	query := AzulQuery{PageSize: 10, Page: 1, OS: "linux", ARCH: "amd64", Latest: true}
+	versions, err := QueryAzulJdkVersions(query)
+	if err != nil {
+		t.Fail()
+	}
+	for _, value := range versions {
+		fmt.Printf("%+v\n", value)
+	}
 }

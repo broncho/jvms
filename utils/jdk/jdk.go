@@ -9,12 +9,12 @@ import (
 type JdkVersion struct {
 	Version string `json:"version"`
 	Url     string `json:"url"`
-	Source  string `json:"source"`
+	Origin  string `json:"origin"`
 }
 
-type JdkSource interface {
-	SourceName() string
-	SourceUrl() string
+type JdkOrigin interface {
+	OriginName() string
+	OriginUrl() string
 	JdkVersions() []JdkVersion
 }
 
@@ -36,9 +36,10 @@ func IsVersionInstalled(root string, version string) bool {
 
 func RemoteJdkVersions() ([]JdkVersion, error) {
 	var versions []JdkVersion
-	var jdkSources = [...]JdkSource{
+	var jdkSources = [...]JdkOrigin{
 		NewAdoptiumJdkSource(),
 		NewAzulJdkSource(),
+		NewTrusteeshipJdkSource(""),
 	}
 	for _, source := range jdkSources {
 		versions = append(versions, source.JdkVersions()...)

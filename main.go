@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/codegangsta/cli"
-	"github.com/tucnak/store"
 	"github.com/ystyle/jvms/utils/file"
 	"github.com/ystyle/jvms/utils/jdk"
 	"github.com/ystyle/jvms/utils/web"
@@ -15,23 +14,6 @@ import (
 	"path/filepath"
 	"strings"
 )
-
-var version = "3.0.0"
-
-const (
-	defaultOriginalpath = "https://raw.githubusercontent.com/ystyle/jvms/new/jdkdlindex.json"
-)
-
-type Config struct {
-	JavaHome          string `json:"java_home"`
-	CurrentJDKVersion string `json:"current_jdk_version"`
-	Originalpath      string `json:"original_path"`
-	Proxy             string `json:"proxy"`
-	store             string `json:"store"`
-	download          string `json:"download"`
-}
-
-var config Config
 
 func main() {
 	app := cli.NewApp()
@@ -66,7 +48,7 @@ func commands() []cli.Command {
 				cli.StringFlag{
 					Name:  "originalpath",
 					Usage: "the jdk download index file url.",
-					Value: defaultOriginalpath,
+					Value: jdk.DefaultOriginalPath,
 				},
 			},
 			Action: func(c *cli.Context) error {
@@ -318,25 +300,13 @@ func getJavaHome(jdkTempFile string) string {
 }
 
 func startup(c *cli.Context) error {
-	store.Init("jvms")
-	if err := store.Load("jvms.json", &config); err != nil {
-		return errors.New("failed to load the config:" + err.Error())
-	}
-	s := file.GetCurrentPath()
-	config.store = filepath.Join(s, "store")
-
-	config.download = filepath.Join(s, "download")
-	if config.Originalpath == "" {
-		config.Originalpath = defaultOriginalpath
-	}
-	if config.Proxy != "" {
-		web.SetProxy(config.Proxy)
-	}
+	_ = initConfig()
 	return nil
 }
 
 func shutdown(c *cli.Context) error {
-	if err := store.Save("jvms.json", &config); err != nil {
+	err := storeConfig()
+	if err != nil {
 		return errors.New("failed to save the config:" + err.Error())
 	}
 	return nil
