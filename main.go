@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-var version = "2.1.0"
+var version = "3.0.0"
 
 const (
 	defaultOriginalpath = "https://raw.githubusercontent.com/ystyle/jvms/new/jdkdlindex.json"
