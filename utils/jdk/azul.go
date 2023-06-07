@@ -9,6 +9,35 @@ import (
 	"strings"
 )
 
+type AzulJdkSource struct {
+	vendor string
+	url    string
+}
+
+func NewAzulJdkSource() *AzulJdkSource {
+	return &AzulJdkSource{
+		vendor: "Azul",
+		url:    "https://api.azul.com/metadata/v1/zulu/packages",
+	}
+}
+
+func (receiver *AzulJdkSource) SourceName() string {
+	return receiver.vendor
+}
+
+func (receiver *AzulJdkSource) SourceUrl() string {
+	return receiver.url
+}
+
+func (receiver *AzulJdkSource) JdkVersions() []JdkVersion {
+	azulJdks := AzulJDKs()
+	var versions []JdkVersion
+	for _, value := range azulJdks {
+		versions = append(versions, JdkVersion{Version: value.ShortName, Url: value.DownloadURL, Source: receiver.SourceName()})
+	}
+	return versions
+}
+
 func AzulJDKs() []AzulJDK {
 	url := AzulApiEndpoint()
 	body := call(url)

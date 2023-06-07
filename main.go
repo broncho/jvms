@@ -29,8 +29,8 @@ type Config struct {
 	CurrentJDKVersion string `json:"current_jdk_version"`
 	Originalpath      string `json:"original_path"`
 	Proxy             string `json:"proxy"`
-	store             string
-	download          string
+	store             string `json:"store"`
+	download          string `json:"download"`
 }
 
 var config Config
