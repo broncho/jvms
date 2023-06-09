@@ -21,8 +21,8 @@ type Config struct {
 	CurrentJDKVersion string `json:"current_jdk_version"`
 	Originalpath      string `json:"original_path"`
 	Proxy             string `json:"proxy"`
-	store             string `json:"store"`
-	download          string `json:"download"`
+	store             string
+	download          string
 }
 
 var AppConfig Config

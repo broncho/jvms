@@ -1,11 +1,9 @@
 package web
 
 import (
-	"errors"
 	"fmt"
 	"github.com/ystyle/jvms/utils/file"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -36,14 +34,24 @@ func Download(url string, target string) bool {
 		fmt.Println("Error status while downloading", url, "-", response.StatusCode)
 		return false
 	}
-	defer response.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(response.Body)
 
 	output, err := os.Create(target)
 	if err != nil {
 		fmt.Println("Error while creating", target, "-", err)
 		return false
 	}
-	defer output.Close()
+	defer func(output *os.File) {
+		err := output.Close()
+		if err != nil {
+
+		}
+	}(output)
 
 	// 创建一个进度条
 	bar := pb.New(int(response.ContentLength)).SetUnits(pb.U_BYTES_DEC).SetRefreshRate(time.Millisecond * 10)
@@ -90,21 +98,6 @@ func GetJDK(download string, version string, url string) (string, bool) {
 		}
 	}
 	return "", false
-
-}
-
-func GetRemoteTextFile(url string) (string, error) {
-	response, httperr := client.Get(url)
-	if httperr != nil {
-		return "", errors.New(fmt.Sprintf("\nCould not retrieve %s.\n\n%s\n", url, httperr.Error()))
-	} else {
-		defer response.Body.Close()
-		contents, readerr := ioutil.ReadAll(response.Body)
-		if readerr != nil {
-			return "", errors.New(fmt.Sprintf("%s", readerr))
-		}
-		return string(contents), nil
-	}
 }
 
 func Call(url string) ([]byte, error) {
