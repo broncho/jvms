@@ -9,14 +9,16 @@ import (
 )
 
 type AzulJdkSource struct {
-	vendor          string
-	vendorOriginUrl string
+	vendor     string
+	vendorHome string
+	apiDoc     string
 }
 
 func NewAzulJdkSource() *AzulJdkSource {
 	return &AzulJdkSource{
-		vendor:          "Azul",
-		vendorOriginUrl: "https://api.azul.com/metadata/v1/zulu/packages",
+		vendor:     "Azul",
+		vendorHome: "https://www.azul.com/",
+		apiDoc:     "https://api.azul.com/metadata/v1/docs/swagger",
 	}
 }
 
@@ -24,8 +26,8 @@ func (receiver *AzulJdkSource) OriginName() string {
 	return receiver.vendor
 }
 
-func (receiver *AzulJdkSource) OriginUrl() string {
-	return receiver.vendorOriginUrl
+func (receiver *AzulJdkSource) OriginDesc() string {
+	return fmt.Sprintf("%s (%s)", receiver.vendorHome, receiver.apiDoc)
 }
 
 func (receiver *AzulJdkSource) JdkVersions() []JdkVersion {

@@ -3,6 +3,7 @@ package web
 import (
 	"errors"
 	"fmt"
+	"github.com/ystyle/jvms/utils/file"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -69,14 +70,18 @@ func Download(url string, target string) bool {
 	return true
 }
 
-func GetJDK(download string, v string, url string) (string, bool) {
-	fileName := filepath.Join(download, fmt.Sprintf("%s.zip", v))
-	os.Remove(fileName)
+func GetJDK(download string, version string, url string) (string, bool) {
+	fileName := filepath.Join(download, fmt.Sprintf("%s.zip", version))
+	if file.Exists(fileName) {
+		fmt.Printf("JDK already download %v", fileName)
+		return fileName, true
+	}
+	//os.Remove(fileName)
 	if url == "" {
 		//No url should mean this version/arch isn't available
-		fmt.Printf("JDK %s isn't available right now.", v)
+		fmt.Printf("JDK %s isn't available right now.", version)
 	} else {
-		fmt.Printf("Downloading jdk version %s...\n", v)
+		fmt.Printf("Downloading jdk version %s...\n", version)
 		if Download(url, fileName) {
 			fmt.Println("Complete")
 			return fileName, true

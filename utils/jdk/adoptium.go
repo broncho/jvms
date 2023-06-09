@@ -11,14 +11,16 @@ import (
 )
 
 type AdoptiumJdkSource struct {
-	vendor string
-	url    string
+	vendor     string
+	vendorHome string
+	apiDoc     string
 }
 
 func NewAdoptiumJdkSource() *AdoptiumJdkSource {
 	return &AdoptiumJdkSource{
-		vendor: "Eclipse",
-		url:    "https://api.adoptium.net/", //https://api.adoptium.net/q/swagger-ui
+		vendor:     "Eclipse",
+		vendorHome: "https://adoptium.net/", //
+		apiDoc:     "https://api.adoptium.net/q/swagger-ui",
 	}
 }
 
@@ -26,8 +28,8 @@ func (receiver *AdoptiumJdkSource) OriginName() string {
 	return receiver.vendor
 }
 
-func (receiver *AdoptiumJdkSource) OriginUrl() string {
-	return receiver.url
+func (receiver *AdoptiumJdkSource) OriginDesc() string {
+	return fmt.Sprintf("%s (%s)", receiver.vendorHome, receiver.apiDoc)
 }
 
 func (receiver *AdoptiumJdkSource) JdkVersions() []JdkVersion {
@@ -119,7 +121,6 @@ func queryAdoptiumVersionAndFilter(release string, jqQuery string) []string {
 
 func QueryAdoptiumRelease() []string {
 	var release []string
-
 	var url = "https://api.adoptium.net/v3/info/available_releases"
 	body, err := web.Call(url)
 	if err != nil {

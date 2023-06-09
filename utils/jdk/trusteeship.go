@@ -9,9 +9,8 @@ import (
 const DefaultOriginalPath = "https://raw.githubusercontent.com/ystyle/jvms/new/jdkdlindex.json"
 
 type TrusteeshipJdkSource struct {
-	vendor     string
-	vendorHome string
-	originUrl  string
+	vendor    string
+	originUrl string
 }
 
 func NewTrusteeshipJdkSource(origin string) *TrusteeshipJdkSource {
@@ -29,8 +28,8 @@ func (receiver *TrusteeshipJdkSource) OriginName() string {
 	return receiver.vendor
 }
 
-func (receiver *TrusteeshipJdkSource) OriginUrl() string {
-	return receiver.vendorHome
+func (receiver *TrusteeshipJdkSource) OriginDesc() string {
+	return receiver.originUrl
 }
 
 func (receiver *TrusteeshipJdkSource) JdkVersions() []JdkVersion {
