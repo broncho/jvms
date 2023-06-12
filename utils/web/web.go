@@ -1,6 +1,7 @@
 package web
 
 import (
+	"errors"
 	"fmt"
 	"github.com/ystyle/jvms/utils/file"
 	"io"
@@ -103,13 +104,11 @@ func GetJDK(download string, version string, url string) (string, bool) {
 func Call(url string) ([]byte, error) {
 	res, err := client.Get(url)
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
-		return nil, err
+		return nil, errors.New(fmt.Sprintf("Call %s error %v", url, err))
 	}
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Printf("error: %v\n", err)
-		return nil, err
+		return nil, errors.New(fmt.Sprintf("Call %s read response error %v", url, err))
 	}
 	return body, nil
 }

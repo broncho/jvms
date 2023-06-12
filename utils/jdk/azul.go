@@ -58,7 +58,6 @@ func QueryAzulJdkVersions(query AzulQuery) ([]AzulJDK, error) {
 	var jdks []AzulJDK
 	err = json.Unmarshal(body, &jdks)
 	if err != nil {
-		fmt.Printf("error %v \n", err)
 		return nil, err
 	}
 	for i := 0; i < len(jdks); i++ {

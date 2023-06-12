@@ -11,15 +11,18 @@ import (
 )
 
 const AppName string = "jvms"
-const ConfigName string = "jvms.json"
+const AppConfigName string = "jvms.json"
 const JdkVersionCacheName = "versions.json"
 const Version = "3.0.0"
+const JdkBaseName = "jdk"
+const DownloadBaseName = "download"
+const StoreBaseName = "store"
 
 type Config struct {
 	JvmsHome          string `json:"jvms_home"`
 	JavaHome          string `json:"java_home"`
 	CurrentJDKVersion string `json:"current_jdk_version"`
-	Originalpath      string `json:"original_path"`
+	OriginalPath      string `json:"original_path"`
 	Proxy             string `json:"proxy"`
 	store             string
 	download          string
@@ -29,7 +32,7 @@ var AppConfig Config
 
 func InitConfig() error {
 	store.Init(AppName)
-	if err := store.Load(ConfigName, &AppConfig); err != nil {
+	if err := store.Load(AppConfigName, &AppConfig); err != nil {
 		return errors.New("failed to load the config:" + err.Error())
 	}
 	workHome := file.GetCurrentPath()
@@ -39,12 +42,12 @@ func InitConfig() error {
 		AppConfig.JvmsHome = workHome
 	}
 	if AppConfig.JavaHome == "" {
-		AppConfig.JavaHome = filepath.Join(AppConfig.JvmsHome, "jdk")
+		AppConfig.JavaHome = filepath.Join(AppConfig.JvmsHome, JdkBaseName)
 	}
-	AppConfig.store = filepath.Join(workHome, "store")
-	AppConfig.download = filepath.Join(workHome, "download")
-	if AppConfig.Originalpath == "" {
-		AppConfig.Originalpath = jdk.DefaultOriginalPath
+	AppConfig.store = filepath.Join(workHome, StoreBaseName)
+	AppConfig.download = filepath.Join(workHome, DownloadBaseName)
+	if AppConfig.OriginalPath == "" {
+		AppConfig.OriginalPath = jdk.DefaultOriginalPath
 	}
 	if AppConfig.Proxy != "" {
 		web.SetProxy(AppConfig.Proxy)
@@ -53,7 +56,7 @@ func InitConfig() error {
 }
 
 func StoreConfig() error {
-	if err := store.Save(ConfigName, &AppConfig); err != nil {
+	if err := store.Save(AppConfigName, &AppConfig); err != nil {
 		return errors.New("failed to save the config:" + err.Error())
 	}
 	return nil

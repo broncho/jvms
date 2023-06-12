@@ -42,7 +42,7 @@ func commands() []cli.Command {
 					Value: file.GetCurrentPath(),
 				},
 				cli.StringFlag{
-					Name:  "originalpath",
+					Name:  "original_path",
 					Usage: "the jdk download index file url.",
 					Value: jdk.DefaultOriginalPath,
 				},

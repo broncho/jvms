@@ -2,7 +2,6 @@ package jdk
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/ystyle/jvms/utils/web"
 )
 
@@ -37,7 +36,6 @@ func (receiver *TrusteeshipJdkSource) JdkVersions() []JdkVersion {
 	var jdks []JdkVersion
 	err = json.Unmarshal(body, &jdks)
 	if err != nil {
-		fmt.Printf("error %v \n", err)
 		return jdks
 	}
 	for i := 0; i < len(jdks); i++ {

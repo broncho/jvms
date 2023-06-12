@@ -26,16 +26,17 @@ func initAction(c *cli.Context) error {
 	}
 	fmt.Println("set `JAVA_HOME` Environment variable to ", AppConfig.JavaHome)
 
-	if c.IsSet("originalpath") || AppConfig.Originalpath == "" {
-		AppConfig.Originalpath = c.String("originalpath")
+	if c.IsSet("original_path") || AppConfig.OriginalPath == "" {
+		AppConfig.OriginalPath = c.String("original_path")
 	}
-	path := fmt.Sprintf(`%s%sbin;%s;%s`, AppConfig.JavaHome, filepath.Separator, os.Getenv("PATH"), file.GetCurrentPath())
+	path := fmt.Sprintf(`%s\bin;%s`, AppConfig.JavaHome, os.Getenv("PATH"))
 	cmd = exec.Command("cmd", "/C", "setx", "path", path, "/m")
 	err = cmd.Run()
 	if err != nil {
 		return errors.New("set Environment variable `PATH` failure: Please run as admin user")
 	}
 	fmt.Println("add jvms.exe to `path` Environment variable")
+	fmt.Printf("!!!work home %s\n", AppConfig.JvmsHome)
 	return nil
 }
 
@@ -100,7 +101,7 @@ func installAction(c *cli.Context) error {
 
 	installed := file.Exists(filepath.Join(AppConfig.store, v))
 	if installed {
-		fmt.Printf("JDK %v ")
+		fmt.Printf("JDK %v ", v)
 	}
 
 	for _, version := range versions {
@@ -206,7 +207,7 @@ func removeAction(c *cli.Context) error {
 	if jdk.IsVersionInstalled(AppConfig.store, v) {
 		fmt.Printf("Remove JDK %s ...\n", v)
 		if AppConfig.CurrentJDKVersion == v {
-			os.Remove(AppConfig.JavaHome)
+			_ = os.Remove(AppConfig.JavaHome)
 		}
 		dir := filepath.Join(AppConfig.store, v)
 		e := os.RemoveAll(dir)
@@ -237,7 +238,6 @@ func versionsAction(c *cli.Context) error {
 
 	var versions = CacheGetVersion()
 	var err error
-	fmt.Println(versions)
 	if len(versions) == 0 || c.Bool("force") {
 		versions, err = jdk.RemoteJdkVersions()
 		if err != nil {
@@ -255,7 +255,7 @@ func versionsAction(c *cli.Context) error {
 		}
 	}
 	if len(versions) == 0 {
-		fmt.Println("No availabled jdk veriosn for download.")
+		fmt.Println("No available jdk version for download.")
 	}
 	return nil
 }
