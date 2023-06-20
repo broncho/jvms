@@ -1,7 +1,9 @@
 # JDK Version Manager (JVMS) for Windows
 
+> Origin repository  [JVMS](https://github.com/ystyle/jvms), The repository has been greatly changed !
+
 Manage multiple installations of JDK on a Windows computer.
-[JVMS](https://github.com/ystyle/jvms), [Download Now](https://github.com/ystyle/jvms/releases)!
+[JVMS](https://github.com/broncho/jvms), [Download Now](https://github.com/broncho/jvms/releases)!
 
 There are situations where the ability to switch between different versions of JDK can be very
 useful. For example, if you want to test a project you're developing with the latest
@@ -9,7 +11,7 @@ bleeding edge version without uninstalling the stable version of JDK, this utili
 
 ### Installation
 
-- [Download Now](https://github.com/ystyle/jvms/releases)
+- [Download Now](https://github.com/broncho/jvms/releases)
 - decompression zip and copy jvms.exe to a path what you want
 - run cmd or powershell as administrator
 - cd to folder where `jvms.exe` in
