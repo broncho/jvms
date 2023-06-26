@@ -13,7 +13,7 @@ import (
 const AppName string = "jvms"
 const AppConfigName string = "jvms.json"
 const JdkVersionCacheName = "versions.json"
-const Version = "3.0.0"
+const Version = "3.0.1"
 const JdkBaseName = "jdk"
 const DownloadBaseName = "download"
 const StoreBaseName = "store"

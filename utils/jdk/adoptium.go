@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type AdoptiumJdkSource struct {
@@ -61,17 +62,18 @@ func QueryAdoptiumVersions(query AdoptiumQuery) ([]string, error) {
 	filter := strings.Replace(jqQuery, "$ARCH", fixedArch(query.ARCH), 1)
 	filter = strings.Replace(filter, "$OS", query.OS, 1)
 	release := QueryAdoptiumRelease()
-	//var wx sync.WaitGroup
-	//wx.Add(len(release))
-	//go func() {
-	// 	web.Call(buildAdoptiumQueryUrl("17"))
-	//
-	//}()
+
+	var wx sync.WaitGroup
+	wx.Add(len(release))
 	var downloadUrls []string
 	for _, v := range release {
-		urls := queryAdoptiumVersionAndFilter(v, filter)
-		downloadUrls = append(downloadUrls, urls...)
+		go func(v string, f string) {
+			urls := queryAdoptiumVersionAndFilter(v, filter)
+			downloadUrls = append(downloadUrls, urls...)
+			defer wx.Done()
+		}(v, filter)
 	}
+	wx.Wait()
 	return downloadUrls, nil
 }
 
